@@ -10,13 +10,13 @@ export const fetchTasks = async (req: Request, res: Response) => {
 
 // * Create Task
 export const createTask = async (req: Request, res: Response) => {
-  const { id, account_id, start_time, duration, schedule, type } = req.body;
+  const { account_id, start_time, duration, schedule, type } = req.body;
 
   const newTask = await prisma.task.create({
-    data: { id, start_time, duration, account_id, type, schedule },
+    data: { start_time, duration, account_id, type, schedule },
   });
 
-  return res.json({ status: 200, data: newTask, msg: 'Task created.' });
+  return res.json({ status: 200, data: newTask, message: 'Task created.' });
 };
 
 // * Get task
@@ -34,14 +34,13 @@ export const getTask = async (req: Request, res: Response) => {
 // * Update Task
 export const updateTask = async (req: Request, res: Response) => {
   const taskId = req.params.id;
-  const { id, account_id, start_time, duration, schedule, type } = req.body;
+  const { account_id, start_time, duration, schedule, type } = req.body;
 
-  await prisma.task.update({
+  const updatedTask = await prisma.task.update({
     where: {
       id: taskId,
     },
     data: {
-      id,
       account_id,
       start_time,
       duration,
@@ -50,7 +49,11 @@ export const updateTask = async (req: Request, res: Response) => {
     },
   });
 
-  return res.json({ status: 200, message: 'Task updated successfully' });
+  return res.json({
+    status: 200,
+    data: updatedTask,
+    message: 'Task updated successfully',
+  });
 };
 
 // * Delete Task
@@ -62,5 +65,5 @@ export const deleteTask = async (req: Request, res: Response) => {
     },
   });
 
-  return res.json({ status: 200, msg: 'Task deleted successfully' });
+  return res.json({ status: 200, message: 'Task deleted successfully' });
 };
