@@ -16,12 +16,17 @@ export const createSchedule = async (req: Request, res: Response) => {
     data: { id, start_time, account_id, agent_id, end_time, tasks },
   });
 
-  return res.json({ status: 200, data: newSchedule, msg: 'Schedule created.' });
+  return res.json({
+    status: 200,
+    data: newSchedule,
+    message: 'Schedule created.',
+  });
 };
 
 // * Get schedule
 export const getSchedule = async (req: Request, res: Response) => {
   const scheduleId = req.params.id;
+  console.log(scheduleId);
   const schedule = await prisma.schedule.findFirst({
     where: {
       id: scheduleId,
@@ -34,16 +39,20 @@ export const getSchedule = async (req: Request, res: Response) => {
 // * Update Schedule
 export const updateSchedule = async (req: Request, res: Response) => {
   const scheduleId = req.params.id;
-  const { id, account_id, start_time, agent_id, end_time, tasks } = req.body;
+  const { id, account_id, agent_id, start_time, end_time, tasks } = req.body;
 
-  await prisma.schedule.update({
+  const updateSchedule = await prisma.schedule.update({
     where: {
       id: scheduleId,
     },
-    data: { id, start_time, account_id, agent_id, end_time, tasks },
+    data: { start_time, agent_id, account_id, end_time, tasks },
   });
 
-  return res.json({ status: 200, message: 'Schedule updated successfully' });
+  return res.json({
+    status: 200,
+    data: updateSchedule,
+    message: 'Schedule updated successfully',
+  });
 };
 
 // * Delete Schedule
@@ -55,5 +64,5 @@ export const deleteSchedule = async (req: Request, res: Response) => {
     },
   });
 
-  return res.json({ status: 200, msg: 'Schedule deleted successfully' });
+  return res.json({ status: 200, message: 'Schedule deleted successfully' });
 };
