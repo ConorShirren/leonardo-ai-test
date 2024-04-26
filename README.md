@@ -13,6 +13,15 @@ Hey 👋  Thank you for taking the time to review my work 🙂
 - Middleware for error hadnling and schema validation (using zod). 
 - Full coverage in unit testing using Jest/Supertest.
 
+### Further Improvements
+I do understand that this solution is far from perfect. If I was to spend more time developing this solutions further, I would focus on the following areas:
+- Improve my use of middleware for error handling and logging
+- Improve API schema error responses for better client experience
+- Abstract some of the repeated error handling in my controllers our to a shared util
+- Add proper auth using JWT to protect the API.
+- Optimize db queries and add additional endpoints for more complex operations.
+- Improve on project structure and layout (some of the config could be cleaned up)
+
 ## Getting Started
 
 To run the project you will need to:
@@ -72,7 +81,7 @@ Run unit tests with Jest:
 ```bash
 npm test
 ```
-### Testing vis Postman
+### Testing via Postman
 
 I have also provided a postman collection that can be easily imported to manually test the API. This can be found at `postman/LeonardoAI.postman_collection.json`
 
