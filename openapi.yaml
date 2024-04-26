@@ -3,7 +3,7 @@ info:
   title: Schedule and Task API
   version: 1.0.0
 paths:
-  /schedules:
+  /schedule:
     get:
       tags:
         - 'Schedule'
@@ -16,7 +16,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Schedule'
+                  $ref: '#/components/schemas/ScheduleResponseBody'
     post:
       tags:
         - 'Schedule'
@@ -26,15 +26,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Schedule'
+              $ref: '#/components/schemas/ScheduleRequestBody'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Schedule'
-  '/schedules/{id}':
+                $ref: '#/components/schemas/ScheduleResponsetBody'
+  '/schedule/{id}':
     parameters:
       - in: path
         name: id
@@ -53,7 +53,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Schedule'
+                $ref: '#/components/schemas/ScheduleResponseBody'
     put:
       tags:
         - 'Schedule'
@@ -63,7 +63,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Schedule'
+              $ref: '#/components/schemas/ScheduleRequestBody'
       responses:
         '200':
           description: OK
@@ -75,7 +75,7 @@ paths:
         '200':
           description: OK
 
-  /tasks:
+  /task:
     get:
       tags:
         - 'Task'
@@ -88,7 +88,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Task'
+                  $ref: '#/components/schemas/TaskResponseBody'
     post:
       tags:
         - 'Task'
@@ -98,15 +98,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/TaskRequestBody'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
-  '/tasks/{id}':
+                $ref: '#/components/schemas/TaskResponseBody'
+  '/task/{id}':
     parameters:
       - in: path
         name: id
@@ -125,7 +125,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
+                $ref: '#/components/schemas/TaskResponseBody'
     put:
       tags:
         - 'Task'
@@ -135,7 +135,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/TaskRequestBody'
       responses:
         '200':
           description: OK
@@ -149,7 +149,20 @@ paths:
 
 components:
   schemas:
-    Schedule:
+    ScheduleRequestBody:
+      type: object
+      properties:
+        account_id:
+          type: integer
+        agent_id:
+          type: integer
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+    ScheduleResponseBody:
       type: object
       properties:
         id:
@@ -168,8 +181,24 @@ components:
         tasks:
           type: array
           items:
-            $ref: '#/components/schemas/Task'
-    Task:
+            $ref: '#/components/schemas/TaskResponseBody'
+    TaskRequestBody:
+      type: object
+      properties:
+        account_id:
+          type: integer
+        schedule_id:
+          type: string
+          format: uuid
+        start_time:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+        type:
+          type: string
+          enum: ['BREAK', 'WORK']
+    TaskResponseBody:
       type: object
       properties:
         id:
@@ -179,6 +208,7 @@ components:
           type: integer
         schedule_id:
           type: string
+          format: uuid
         start_time:
           type: string
           format: date-time
