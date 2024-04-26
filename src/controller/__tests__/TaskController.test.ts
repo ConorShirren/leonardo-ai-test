@@ -24,8 +24,8 @@ jest.mock('../../utils/db.config', () => ({
 describe('Task Controller', () => {
   const mockedDate = new Date('2024-04-25T12:00:00Z');
   const task: Task = {
-    id: '123e4567-e89b-12d3-a456-426614174000P',
     account_id: 1,
+    schedule_id: '1',
     start_time: mockedDate,
     duration: 1000,
     type: TaskType.BREAK,

@@ -24,6 +24,16 @@ jest.mock('../../controller/ScheduleController', () => ({
 }));
 
 describe('Schedule Routes', () => {
+  const mockedDate = new Date('2024-04-25T12:00:00Z');
+
+  beforeEach(() => {
+    jest.spyOn(global, 'Date').mockImplementation(() => mockedDate);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   describe('fetchSchedules', () => {
     const mockedDate = new Date('2024-04-25T12:00:00Z');
 
@@ -42,8 +52,8 @@ describe('Schedule Routes', () => {
         {
           id: '123e4567-e89b-12d3-a456-426614174000',
           account_id: 1,
-          // start_time: mockedDate,
-          // end_time: mockedDate,
+          start_time: mockedDate,
+          end_time: mockedDate,
           agent_id: 1234,
           tasks: [],
         },
@@ -58,7 +68,16 @@ describe('Schedule Routes', () => {
       const response = await request(app).get('/');
       expect(response.status).toBe(200);
       expect(fetchSchedules).toHaveBeenCalledTimes(1);
-      expect(response.body).toEqual({ status: 200, data: schedules });
+      expect(response.body).toEqual({
+        status: 200,
+        data: [
+          {
+            ...schedules[0],
+            start_time: schedules[0].start_time.toISOString(),
+            end_time: schedules[0].end_time.toISOString(),
+          },
+        ],
+      });
     });
   });
 
@@ -67,8 +86,8 @@ describe('Schedule Routes', () => {
       const schedule: Schedule = {
         id: '123e4567-e89b-12d3-a456-426614174000',
         account_id: 1,
-        // start_time: mockedDate,
-        // end_time: mockedDate,
+        start_time: mockedDate,
+        end_time: mockedDate,
         agent_id: 1234,
         tasks: [],
       };
@@ -84,7 +103,14 @@ describe('Schedule Routes', () => {
       );
       expect(response.status).toBe(200);
       expect(getSchedule).toHaveBeenCalledTimes(1);
-      expect(response.body).toEqual({ status: 200, data: schedule });
+      expect(response.body).toEqual({
+        status: 200,
+        data: {
+          ...schedule,
+          start_time: schedule.start_time.toISOString(),
+          end_time: schedule.end_time.toISOString(),
+        },
+      });
     });
   });
 
@@ -93,8 +119,8 @@ describe('Schedule Routes', () => {
       const schedule: Schedule = {
         id: '123e4567-e89b-12d3-a456-426614174000',
         account_id: 1,
-        // start_time: mockedDate,
-        // end_time: mockedDate,
+        start_time: mockedDate,
+        end_time: mockedDate,
         agent_id: 1234,
         tasks: [],
       };
@@ -114,7 +140,11 @@ describe('Schedule Routes', () => {
       expect(createSchedule).toHaveBeenCalledTimes(1);
       expect(response.body).toEqual({
         status: 200,
-        data: schedule,
+        data: {
+          ...schedule,
+          start_time: schedule.start_time.toISOString(),
+          end_time: schedule.end_time.toISOString(),
+        },
         message: 'Schedule created.',
       });
     });
@@ -125,8 +155,8 @@ describe('Schedule Routes', () => {
       const schedule: Schedule = {
         id: '123e4567-e89b-12d3-a456-426614174000',
         account_id: 1,
-        // start_time: mockedDate,
-        // end_time: mockedDate,
+        start_time: mockedDate,
+        end_time: mockedDate,
         agent_id: 1234,
         tasks: [],
       };
