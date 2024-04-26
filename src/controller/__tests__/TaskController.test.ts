@@ -75,7 +75,7 @@ describe('Task Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
         data: task,
-        msg: 'Task created.',
+        message: 'Task created.',
       });
     });
   });
@@ -146,7 +146,7 @@ describe('Task Controller', () => {
       });
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
-        msg: 'Task deleted successfully',
+        message: 'Task deleted successfully',
       });
     });
   });

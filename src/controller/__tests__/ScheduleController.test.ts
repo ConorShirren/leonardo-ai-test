@@ -86,7 +86,7 @@ describe('Schedule Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
         data: schedule,
-        msg: 'Schedule created.',
+        message: 'Schedule created.',
       });
     });
   });
@@ -157,7 +157,7 @@ describe('Schedule Controller', () => {
       });
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
-        msg: 'Schedule deleted successfully',
+        message: 'Schedule deleted successfully',
       });
     });
   });
