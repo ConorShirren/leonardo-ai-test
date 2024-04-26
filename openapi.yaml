@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: Schedule and Task API
+  version: 1.0.0
+paths:
+  /schedule:
+    get:
+      tags:
+        - 'Schedule'
+      summary: Get all schedules
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScheduleResponseBody'
+    post:
+      tags:
+        - 'Schedule'
+      summary: Create a new schedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleRequestBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleResponsetBody'
+  '/schedule/{id}':
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Schedule ID
+    get:
+      tags:
+        - 'Schedule'
+      summary: Get a schedule by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleResponseBody'
+    put:
+      tags:
+        - 'Schedule'
+      summary: Update a schedule by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleRequestBody'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - 'Schedule'
+      summary: Delete a schedule by ID
+      responses:
+        '200':
+          description: OK
+
+  /task:
+    get:
+      tags:
+        - 'Task'
+      summary: Get all tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskResponseBody'
+    post:
+      tags:
+        - 'Task'
+      summary: Create a new task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequestBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponseBody'
+  '/task/{id}':
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Task ID
+    get:
+      tags:
+        - 'Task'
+      summary: Get a task by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponseBody'
+    put:
+      tags:
+        - 'Task'
+      summary: Update a task by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequestBody'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - 'Task'
+      summary: Delete a task by ID
+      responses:
+        '200':
+          description: OK
+
+components:
+  schemas:
+    ScheduleRequestBody:
+      type: object
+      properties:
+        account_id:
+          type: integer
+        agent_id:
+          type: integer
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+    ScheduleResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        account_id:
+          type: integer
+        agent_id:
+          type: integer
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskResponseBody'
+    TaskRequestBody:
+      type: object
+      properties:
+        account_id:
+          type: integer
+        schedule_id:
+          type: string
+          format: uuid
+        start_time:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+        type:
+          type: string
+          enum: ['BREAK', 'WORK']
+    TaskResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        account_id:
+          type: integer
+        schedule_id:
+          type: string
+          format: uuid
+        start_time:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+        type:
+          type: string
+          enum: ['BREAK', 'WORK']

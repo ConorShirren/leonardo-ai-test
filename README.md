@@ -1,46 +1,83 @@
-# leonardo-ai-test
+# Leonardo AI Techincal Test
 
-Welcome to Leonardo.Ai API Team Technical Challenge V2 and well done for passing to stage 2.
+Hey 👋  Thank you for taking the time to review my work 🙂
 
-We hope you don’t spend more than 2 hours on this challenge. Here is what we would like you to do...
-Challenge Instruction:
-In this technical interview test, you are required to implement API endpoints for managing schedules and tasks using TypeScript. The project involves designing and building RESTful or Lambda API endpoints to handle scheduling and task management. Below are the details of the resources you'll be working with:
-## Schedule
+## Notes
+
+- The REST API is built using Express, Prisma and PosgreSQL.
+- The entry point of the app is `src/index.ts`.
+- Routes can be found at `src/routes` and controllers can be found at `src/controllers`.
+- Controllers provide CRUD capabilities for both Schedules and tasks.
+- Prisma is used as an ORM and db models are defined in `prisma/schema.prisma`.
+- API supports one to many relationship between schedules and tasks. `schedule_id` can be passed to the `createTask` endpoint.
+- Middleware for error hadnling and schema validation (using zod). 
+- Full coverage in unit testing using Jest/Supertest.
+
+## Getting Started
+
+To run the project you will need to:
+1. Clone the repository:
+```bash
+   git clone <repository-url>
 ```
-- `id`: Universally unique identifier (UUID) for the schedule.
-- `account_id`: Integer representing the account associated with the schedule.
-- `agent_id`: Integer representing the agent assigned to the schedule.
-- `start_time`: DateTime indicating the start time of the schedule.
-- `end_time`: DateTime indicating the end time of the schedule.
-```
-## Tasks
-```
-- `id`: UUID for the task.
-- `account_id`: Integer representing the account associated with the task.
-- `schedule_id`: UUID referencing the schedule to which the task belongs.
-- `start_time`: DateTime indicating the start time of the task.
-- `duration`: Integer representing the duration of the task.
-- `type`: String enumeration with values 'break' or 'work', indicating the type of task.
-```
-There's a one-to-many relationship between Schedule and Tasks, where a Schedule can have multiple Tasks associated.
-# Guidelines
-Please follow the guidelines below while working on this test:
-- Implement your solution using TypeScript, and feel free to use any packages or frameworks of
-your choice.
-- Utilise a SQL-based database, preferably PostgreSQL, for data storage. You can consider using
-Prisma as an ORM (Object-Relational Mapping) tool.
-- You can choose between building RESTful API endpoints or using AWS Lambda for serverless
-endpoints.
-- Consider organising your code with relevant design patterns suitable for CRUD (Create, Read,
-Update, Delete) applications.
-- Aim to future-proof your codebase by writing clean, maintainable, and extensible code.
-- Keep the SOLID principles (Single Responsibility, Open/Closed, Liskov Substitution, Interface
-Segregation, Dependency Inversion) in mind while designing your solution.
 
-# Unit Tests
-Writing unit tests is an essential part of this test. Please ensure that you write thorough unit tests to validate the functionality of your API endpoints.
-  
-# Integration Tests
-Writing integration tests are not part of this test, but it will be nice to have..
+2. Install dependencies:
+```bash
+cd leonardo-ai-test
+npm install
+```
 
+3. Set up the database:
+    - You will need a running version of postgresql for the server to connect to. For this, you can use the provided docker compose file by running `docker-compose up -d` from the root of the project.
+    - Configure the database connection in the .env file (see `.env.example`)
+    - Run database migrations
 
+```bash
+prisma migrate dev --name init
+```
+
+4. Run the server
+```bash
+npm start
+```
+
+## Endpoints
+
+#### Schedules
+
+- `GET /schedule`: Fetch all schedules
+- `GET /schedule/:id`: Fetch a schedule by ID
+- `POST /schedule`: Create a new schedule
+- `PUT /schedule/:id`: Update a schedule by ID
+- `DELETE /schedule/:id`: Delete a schedule by ID
+
+#### Tasks
+
+- `GET /task`: Fetch all tasks
+- `GET /task/:id`: Fetch a task by ID
+- `POST /task`: Create a new task
+- `PUT /task/:id`: Update a task by ID
+- `DELETE /task/:id`: Delete a task by ID
+
+### Swagger UI
+While the server is running, you can accesss the served swagger docs at [http://localhost:3000/api-docs/#/](http://localhost:3000/api-docs/#/)
+
+![swagger](./assets/swagger.png)
+
+## Testing
+
+### Unit Testing
+Run unit tests with Jest:
+
+```bash
+npm test
+```
+### Testing vis Postman
+
+I have also provided a postman collection that can be easily imported to manually test the API. This can be found at `postman/LeonardoAI.postman_collection.json`
+
+The postman collection uses dynamic global variables so you don't need to worry about handling IDs. If you first create a schedule or task, you will then be able to make further GET, PUT and DELETE requests without needing to manually alter the request body.
+
+![swagger](./assets/postman.png)
+
+---
