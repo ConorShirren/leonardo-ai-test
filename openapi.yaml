@@ -1,0 +1,189 @@
+openapi: 3.0.0
+info:
+  title: Schedule and Task API
+  version: 1.0.0
+paths:
+  /schedules:
+    get:
+      tags:
+        - 'Schedule'
+      summary: Get all schedules
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+    post:
+      tags:
+        - 'Schedule'
+      summary: Create a new schedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Schedule'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+  '/schedules/{id}':
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Schedule ID
+    get:
+      tags:
+        - 'Schedule'
+      summary: Get a schedule by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+    put:
+      tags:
+        - 'Schedule'
+      summary: Update a schedule by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Schedule'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - 'Schedule'
+      summary: Delete a schedule by ID
+      responses:
+        '200':
+          description: OK
+
+  /tasks:
+    get:
+      tags:
+        - 'Task'
+      summary: Get all tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+    post:
+      tags:
+        - 'Task'
+      summary: Create a new task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+  '/tasks/{id}':
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Task ID
+    get:
+      tags:
+        - 'Task'
+      summary: Get a task by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    put:
+      tags:
+        - 'Task'
+      summary: Update a task by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - 'Task'
+      summary: Delete a task by ID
+      responses:
+        '200':
+          description: OK
+
+components:
+  schemas:
+    Schedule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        account_id:
+          type: integer
+        agent_id:
+          type: integer
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        account_id:
+          type: integer
+        schedule_id:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+        type:
+          type: string
+          enum: ['BREAK', 'WORK']

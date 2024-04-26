@@ -1,18 +1,23 @@
 import 'dotenv/config';
 
+import YAML from 'yaml';
 import express from 'express';
+import fs from 'fs';
+// import { openApiValidator } from './middleware/validator';
 import routes from './routes/index';
+import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Serve Swagger Docs
+const file = fs.readFileSync('./openapi.yaml', 'utf8');
+const swaggerDocument = YAML.parse(file);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-// Test Route
-app.get('/', (req, res) => {
-  return res.send('Hi Everyone.');
-});
+// app.use(openApiValidator);
 
 app.use(routes);
 
