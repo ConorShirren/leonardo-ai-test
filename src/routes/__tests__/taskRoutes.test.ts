@@ -98,7 +98,7 @@ describe('createTask', () => {
 
     (createTask as jest.Mock).mockImplementationOnce(
       (req: Request, res: Response) => {
-        res.json({ status: 200, data: task, msg: 'Task created.' });
+        res.json({ status: 200, data: task, message: 'Task created.' });
       }
     );
 
@@ -108,7 +108,7 @@ describe('createTask', () => {
     expect(response.body).toEqual({
       status: 200,
       data: task,
-      msg: 'Task created.',
+      message: 'Task created.',
     });
   });
 });
@@ -144,7 +144,7 @@ describe('deleteTask', () => {
   it('should call getTask controller function and return 200 status code with task', async () => {
     (deleteTask as jest.Mock).mockImplementationOnce(
       (req: Request, res: Response) => {
-        res.json({ status: 200, msg: 'Task deleted successfully' });
+        res.json({ status: 200, message: 'Task deleted successfully' });
       }
     );
 
@@ -155,7 +155,7 @@ describe('deleteTask', () => {
     expect(deleteTask).toHaveBeenCalledTimes(1);
     expect(response.body).toEqual({
       status: 200,
-      msg: 'Task deleted successfully',
+      message: 'Task deleted successfully',
     });
   });
 });

@@ -101,7 +101,11 @@ describe('Schedule Routes', () => {
 
       (createSchedule as jest.Mock).mockImplementationOnce(
         (req: Request, res: Response) => {
-          res.json({ status: 200, data: schedule, msg: 'Schedule created.' });
+          res.json({
+            status: 200,
+            data: schedule,
+            message: 'Schedule created.',
+          });
         }
       );
 
@@ -111,7 +115,7 @@ describe('Schedule Routes', () => {
       expect(response.body).toEqual({
         status: 200,
         data: schedule,
-        msg: 'Schedule created.',
+        message: 'Schedule created.',
       });
     });
   });
@@ -149,7 +153,7 @@ describe('Schedule Routes', () => {
     it('should call getSchedule controller function and return 200 status code with schedule', async () => {
       (deleteSchedule as jest.Mock).mockImplementationOnce(
         (req: Request, res: Response) => {
-          res.json({ status: 200, msg: 'Schedule deleted successfully' });
+          res.json({ status: 200, message: 'Schedule deleted successfully' });
         }
       );
 
@@ -160,7 +164,7 @@ describe('Schedule Routes', () => {
       expect(deleteSchedule).toHaveBeenCalledTimes(1);
       expect(response.body).toEqual({
         status: 200,
-        msg: 'Schedule deleted successfully',
+        message: 'Schedule deleted successfully',
       });
     });
   });
