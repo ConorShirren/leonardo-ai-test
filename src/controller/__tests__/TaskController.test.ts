@@ -9,6 +9,7 @@ import {
 } from '../TaskController';
 
 import prisma from '../../utils/db.config';
+import { scheduler } from 'timers/promises';
 
 jest.mock('../../utils/db.config', () => ({
   task: {
@@ -96,6 +97,7 @@ describe('Task Controller', () => {
       expect(prisma.task.findFirst).toHaveBeenCalledTimes(1);
       expect(prisma.task.findFirst).toHaveBeenCalledWith({
         where: { id: taskId },
+        include: { schedule: true },
       });
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
@@ -107,9 +109,16 @@ describe('Task Controller', () => {
   describe('updateTask', () => {
     it('should update an existing task and return success message', async () => {
       const taskId = '123e4567-e89b-12d3-a456-426614174000';
+      const updatedTask = {
+        account_id: 1,
+        schedule_id: '123e4567-e89b-12d3-a456-426614174000P',
+        start_time: mockedDate,
+        duration: 1000,
+        type: TaskType.BREAK,
+      };
       const req = {
         params: { id: taskId },
-        body: task,
+        body: updatedTask,
       } as unknown as Request;
       const res = {
         json: jest.fn(),
@@ -120,7 +129,7 @@ describe('Task Controller', () => {
       expect(prisma.task.update).toHaveBeenCalledTimes(1);
       expect(prisma.task.update).toHaveBeenCalledWith({
         where: { id: taskId },
-        data: task,
+        data: updatedTask,
       });
       expect(res.json).toHaveBeenCalledWith({
         status: 200,

@@ -15,7 +15,7 @@ jest.mock('../../utils/db.config', () => ({
   schedule: {
     findMany: jest.fn(),
     create: jest.fn(),
-    findFirst: jest.fn(),
+    findUnique: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
   },
@@ -95,7 +95,7 @@ describe('Schedule Controller', () => {
     it('should fetch a single schedule from the database and return it', async () => {
       const scheduleId = '1';
 
-      (prisma.schedule.findFirst as jest.Mock).mockResolvedValueOnce(schedule);
+      (prisma.schedule.findUnique as jest.Mock).mockResolvedValueOnce(schedule);
 
       const req = { params: { id: scheduleId } } as unknown as Request;
       const res = {
@@ -104,9 +104,10 @@ describe('Schedule Controller', () => {
 
       await getSchedule(req, res);
 
-      expect(prisma.schedule.findFirst).toHaveBeenCalledTimes(1);
-      expect(prisma.schedule.findFirst).toHaveBeenCalledWith({
+      expect(prisma.schedule.findUnique).toHaveBeenCalledTimes(1);
+      expect(prisma.schedule.findUnique).toHaveBeenCalledWith({
         where: { id: scheduleId },
+        include: { tasks: true },
       });
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
@@ -117,10 +118,17 @@ describe('Schedule Controller', () => {
 
   describe('updateSchedule', () => {
     it('should update an existing schedule and return success message', async () => {
+      (prisma.schedule.update as jest.Mock).mockResolvedValueOnce(schedule);
+      const updatedSchedule = {
+        account_id: 1,
+        start_time: mockedDate,
+        end_time: mockedDate,
+        agent_id: 1234,
+      };
       const scheduleId = '123e4567-e89b-12d3-a456-426614174000';
       const req = {
         params: { id: scheduleId },
-        body: schedule,
+        body: updatedSchedule,
       } as unknown as Request;
       const res = {
         json: jest.fn(),
@@ -131,10 +139,11 @@ describe('Schedule Controller', () => {
       expect(prisma.schedule.update).toHaveBeenCalledTimes(1);
       expect(prisma.schedule.update).toHaveBeenCalledWith({
         where: { id: scheduleId },
-        data: schedule,
+        data: updatedSchedule,
       });
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
+        data: schedule,
         message: 'Schedule updated successfully',
       });
     });
