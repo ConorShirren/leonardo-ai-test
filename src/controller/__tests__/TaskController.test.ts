@@ -13,9 +13,9 @@ import { scheduler } from 'timers/promises';
 
 jest.mock('../../utils/db.config', () => ({
   task: {
+    findUnique: jest.fn(),
     findMany: jest.fn(),
     create: jest.fn(),
-    findFirst: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
   },
@@ -57,6 +57,26 @@ describe('Task Controller', () => {
         data: tasks,
       });
     });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.task, 'findMany').mockRejectedValueOnce(mockError);
+
+      const req = {} as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await fetchTasks(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to fetch tasks',
+        error: mockError.message,
+      });
+    });
   });
 
   describe('createTask', () => {
@@ -79,13 +99,33 @@ describe('Task Controller', () => {
         message: 'Task created.',
       });
     });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.task, 'create').mockRejectedValueOnce(mockError);
+
+      const req = { body: { id: '1' } } as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await createTask(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to create task',
+        error: mockError.message,
+      });
+    });
   });
 
   describe('getTask', () => {
     it('should fetch a single task from the database and return it', async () => {
       const taskId = '1';
 
-      (prisma.task.findFirst as jest.Mock).mockResolvedValueOnce(task);
+      (prisma.task.findUnique as jest.Mock).mockResolvedValueOnce(task);
 
       const req = { params: { id: taskId } } as unknown as Request;
       const res = {
@@ -94,14 +134,34 @@ describe('Task Controller', () => {
 
       await getTask(req, res);
 
-      expect(prisma.task.findFirst).toHaveBeenCalledTimes(1);
-      expect(prisma.task.findFirst).toHaveBeenCalledWith({
+      expect(prisma.task.findUnique).toHaveBeenCalledTimes(1);
+      expect(prisma.task.findUnique).toHaveBeenCalledWith({
         where: { id: taskId },
         include: { schedule: true },
       });
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
         data: task,
+      });
+    });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.task, 'findUnique').mockRejectedValueOnce(mockError);
+
+      const req = { params: { id: '1' } } as unknown as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await getTask(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to fetch task',
+        error: mockError.message,
       });
     });
   });
@@ -136,6 +196,29 @@ describe('Task Controller', () => {
         message: 'Task updated successfully',
       });
     });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.task, 'update').mockRejectedValueOnce(mockError);
+
+      const req = {
+        body: { id: '1' },
+        params: { id: '1' },
+      } as unknown as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await updateTask(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to update task',
+        error: mockError.message,
+      });
+    });
   });
 
   describe('deleteTask', () => {
@@ -156,6 +239,26 @@ describe('Task Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
         message: 'Task deleted successfully',
+      });
+    });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.task, 'delete').mockRejectedValueOnce(mockError);
+
+      const req = { params: { id: '1' } } as unknown as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await deleteTask(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to delete task',
+        error: mockError.message,
       });
     });
   });

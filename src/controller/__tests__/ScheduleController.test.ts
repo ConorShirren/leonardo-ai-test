@@ -67,6 +67,26 @@ describe('Schedule Controller', () => {
         data: schedules,
       });
     });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.schedule, 'findMany').mockRejectedValueOnce(mockError);
+
+      const req = {} as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await fetchSchedules(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to fetch schedules',
+        error: mockError.message,
+      });
+    });
   });
 
   describe('createSchedule', () => {
@@ -87,6 +107,26 @@ describe('Schedule Controller', () => {
         status: 200,
         data: schedule,
         message: 'Schedule created.',
+      });
+    });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.schedule, 'create').mockRejectedValueOnce(mockError);
+
+      const req = { body: { id: '1' } } as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await createSchedule(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to create schedule',
+        error: mockError.message,
       });
     });
   });
@@ -112,6 +152,28 @@ describe('Schedule Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
         data: schedule,
+      });
+    });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest
+        .spyOn(prisma.schedule, 'findUnique')
+        .mockRejectedValueOnce(mockError);
+
+      const req = { params: { id: '1' } } as unknown as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await getSchedule(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to get schedule',
+        error: mockError.message,
       });
     });
   });
@@ -147,6 +209,29 @@ describe('Schedule Controller', () => {
         message: 'Schedule updated successfully',
       });
     });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.schedule, 'update').mockRejectedValueOnce(mockError);
+
+      const req = {
+        body: { id: '1' },
+        params: { id: '1' },
+      } as unknown as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await updateSchedule(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to update schedule',
+        error: mockError.message,
+      });
+    });
   });
 
   describe('deleteSchedule', () => {
@@ -167,6 +252,26 @@ describe('Schedule Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         status: 200,
         message: 'Schedule deleted successfully',
+      });
+    });
+
+    it('should return 500 status and error message when an error occurs', async () => {
+      const mockError = new Error('Mock error');
+      jest.spyOn(prisma.schedule, 'delete').mockRejectedValueOnce(mockError);
+
+      const req = { params: { id: '1' } } as unknown as Request;
+      const res = {
+        json: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+      } as unknown as Response;
+
+      await deleteSchedule(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'error',
+        message: 'Internal Server Error: Failed to delete schedule',
+        error: mockError.message,
       });
     });
   });

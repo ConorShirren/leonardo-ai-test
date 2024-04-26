@@ -9,7 +9,6 @@ export const validate =
 
       next();
     } catch (error: any) {
-      console.dir(error.errors);
       if (error instanceof ZodError) {
         return res.status(400).json({
           status: 'fail',
