@@ -10,10 +10,10 @@ export const fetchSchedules = async (req: Request, res: Response) => {
 
 // * Create Schedule
 export const createSchedule = async (req: Request, res: Response) => {
-  const { id, account_id, start_time, agent_id, end_time, tasks } = req.body;
+  const { id, account_id, start_time, agent_id, end_time } = req.body;
 
   const newSchedule = await prisma.schedule.create({
-    data: { id, start_time, account_id, agent_id, end_time, tasks },
+    data: { id, start_time, account_id, agent_id, end_time },
   });
 
   return res.json({
@@ -26,10 +26,12 @@ export const createSchedule = async (req: Request, res: Response) => {
 // * Get schedule
 export const getSchedule = async (req: Request, res: Response) => {
   const scheduleId = req.params.id;
-  console.log(scheduleId);
-  const schedule = await prisma.schedule.findFirst({
+  const schedule = await prisma.schedule.findUnique({
     where: {
       id: scheduleId,
+    },
+    include: {
+      tasks: true,
     },
   });
 
@@ -39,13 +41,13 @@ export const getSchedule = async (req: Request, res: Response) => {
 // * Update Schedule
 export const updateSchedule = async (req: Request, res: Response) => {
   const scheduleId = req.params.id;
-  const { id, account_id, agent_id, start_time, end_time, tasks } = req.body;
+  const { account_id, agent_id, start_time, end_time } = req.body;
 
   const updateSchedule = await prisma.schedule.update({
     where: {
       id: scheduleId,
     },
-    data: { start_time, agent_id, account_id, end_time, tasks },
+    data: { start_time, agent_id, account_id, end_time },
   });
 
   return res.json({

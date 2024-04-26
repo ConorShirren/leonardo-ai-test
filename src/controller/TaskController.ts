@@ -10,10 +10,10 @@ export const fetchTasks = async (req: Request, res: Response) => {
 
 // * Create Task
 export const createTask = async (req: Request, res: Response) => {
-  const { account_id, start_time, duration, schedule, type } = req.body;
+  const { account_id, start_time, duration, type, schedule_id } = req.body;
 
   const newTask = await prisma.task.create({
-    data: { start_time, duration, account_id, type, schedule },
+    data: { start_time, duration, account_id, type, schedule_id },
   });
 
   return res.json({ status: 200, data: newTask, message: 'Task created.' });
@@ -26,6 +26,9 @@ export const getTask = async (req: Request, res: Response) => {
     where: {
       id: taskId,
     },
+    include: {
+      schedule: true,
+    },
   });
 
   return res.json({ status: 200, data: task });
@@ -34,7 +37,7 @@ export const getTask = async (req: Request, res: Response) => {
 // * Update Task
 export const updateTask = async (req: Request, res: Response) => {
   const taskId = req.params.id;
-  const { account_id, start_time, duration, schedule, type } = req.body;
+  const { account_id, start_time, duration, schedule_id, type } = req.body;
 
   const updatedTask = await prisma.task.update({
     where: {
@@ -44,7 +47,7 @@ export const updateTask = async (req: Request, res: Response) => {
       account_id,
       start_time,
       duration,
-      schedule,
+      schedule_id,
       type,
     },
   });
