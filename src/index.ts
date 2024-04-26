@@ -1,9 +1,9 @@
 import 'dotenv/config';
 
 import YAML from 'yaml';
+import { errorHandler } from './middleware/errorHandler';
 import express from 'express';
 import fs from 'fs';
-// import { openApiValidator } from './middleware/validator';
 import routes from './routes/index';
 import swaggerUi from 'swagger-ui-express';
 
@@ -17,7 +17,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(openApiValidator);
+app.use(errorHandler);
 
 app.use(routes);
 
