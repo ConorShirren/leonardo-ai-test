@@ -76,6 +76,8 @@ npm test
 
 I have also provided a postman collection that can be easily imported to manually test the API. This can be found at `postman/LeonardoAI.postman_collection.json`
 
+The postman collection uses dynamic global variables so you don't need to worry about handling IDs. If you first create a schedule or task, you will then be able to make further GET, PUT and DELETE requests without needing to manually alter the request body.
+
 ![swagger](./assets/postman.png)
 
 ---

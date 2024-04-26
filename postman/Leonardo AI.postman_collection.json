@@ -10,27 +10,24 @@
 			"name": "Schedules",
 			"item": [
 				{
-					"name": "Fetch Schedules",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/api/schedule",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"schedule"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Create Schedule",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the ID from the response body",
+									"var responseBody = pm.response.json();",
+									"var scheduleId = responseBody.data.id;",
+									"",
+									"// Set the ID to a global variable",
+									"pm.globals.set('scheduleId', scheduleId);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -64,7 +61,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/schedule/a81925f4-b25a-4f1b-94ce-3e07f13afb61",
+							"raw": "http://localhost:3000/api/schedule/{{scheduleId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -73,7 +70,27 @@
 							"path": [
 								"api",
 								"schedule",
-								"a81925f4-b25a-4f1b-94ce-3e07f13afb61"
+								"{{scheduleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Schedules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/schedule",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"schedule"
 							]
 						}
 					},
@@ -94,7 +111,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/schedule/29e9041a-2d8d-4ac9-86c9-4af1b75532bd",
+							"raw": "http://localhost:3000/api/schedule/{{scheduleId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -103,7 +120,7 @@
 							"path": [
 								"api",
 								"schedule",
-								"29e9041a-2d8d-4ac9-86c9-4af1b75532bd"
+								"{{scheduleId}}"
 							]
 						}
 					},
@@ -115,7 +132,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/schedule/626cfcff-0746-487c-8a61-1f15d493d387",
+							"raw": "http://localhost:3000/api/schedule/{{scheduleId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -124,7 +141,7 @@
 							"path": [
 								"api",
 								"schedule",
-								"626cfcff-0746-487c-8a61-1f15d493d387"
+								"{{scheduleId}}"
 							]
 						}
 					},
@@ -136,45 +153,30 @@
 			"name": "Tasks",
 			"item": [
 				{
-					"name": "Fetch Task",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/task",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"task"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the ID from the response body",
+									"var responseBody = pm.response.json();",
+									"var taskId = responseBody.data.id;",
+									"",
+									"// Set the ID to a global variable",
+									"pm.globals.set('taskId', taskId);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"account_id\": 1,\n    \"start_time\": \"2024-04-24T10:12:14.418Z\",\n    \"duration\": 80,\n    \"schedule_id\": \"a81925f4-b25a-4f1b-94ce-3e07f13afb61\",\n    \"type\": \"BREAK\"\n}",
+							"raw": "{\n    \"account_id\": 1,\n    \"start_time\": \"2024-04-24T10:12:14.418Z\",\n    \"duration\": 80,\n    \"schedule_id\": \"{{scheduleId}}\",\n    \"type\": \"BREAK\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -214,7 +216,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/task/eada3831-c1af-4b57-a43a-1b8a4cb3ac41",
+							"raw": "http://localhost:3000/api/task/{{taskId}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -223,44 +225,14 @@
 							"path": [
 								"api",
 								"task",
-								"eada3831-c1af-4b57-a43a-1b8a4cb3ac41"
+								"{{taskId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Task",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"account_id\": 1,\n    \"start_time\": \"2024-04-24T10:12:14.418Z\",\n    \"end_time\": \"2024-04-24T10:12:14.418Z\",\n    \"agent_id\": 54321\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/task/626cfcff-0746-487c-8a61-1f15d493d387",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"task",
-								"626cfcff-0746-487c-8a61-1f15d493d387"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Task",
+					"name": "Fetch Task",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -286,6 +258,66 @@
 							"path": [
 								"api",
 								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"account_id\": 1,\n    \"start_time\": \"2024-04-24T10:12:14.418Z\",\n    \"duration\": 80,\n    \"schedule_id\": \"{{scheduleId}}\",\n    \"type\": \"BREAK\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/task/{{taskId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"task",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/task/{{taskId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"task",
+								"{{taskId}}"
 							]
 						}
 					},
